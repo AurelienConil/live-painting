@@ -24,19 +24,10 @@ Input::Input(ofParameterGroup* _pg,
 //--------------------------------------------------------------
 void Input::setup(){
   
-#if INPUT_VIDEO == 0
-    videoIndex.addListener(this, &Input::setVideoIndex);
-    playerPause.addListener(this, &Input::setVideoPause);
-#endif
     
     // GUI MANAGEMENT
     pg->setName("Input");
     pg->add(isShown.set("show", true));
-#if INPUT_VIDEO == 0
-    pg->add(videoIndex.set("video_index", 3, 1, 7));
-    pg->add(playerPause.set("video_pause", false));
-    
-#endif
     pg->add(gain.set("gain lum", 0,-1.0, 1.0));
     pg->add(threshold.set("threshold", 0.1,0, 1.0));
     pg->add(smooth.set("threshold_curve", 0, 0, 1));
@@ -45,13 +36,7 @@ void Input::setup(){
     //pg->add(blur.set("blur", 0, 0, 10));
     //pg->add(skipStep.set("skip_step", 2, 0, 3));
     
-#if INPUT_VIDEO == 0
-    name = "VIDEO PLAYER";
-#elif INPUT_VIDEO == 1
-    //BLACK MAGIC
-    blackMagic.setup(INPUT_WIDTH, INPUT_HEIGHT, INPUT_FRAMERATE);
-    name = "BLACK MAGIC";
-#elif INPUT_VIDEO == 2
+
     // VIDEO GRABBER
     videoGrabberIndex.addListener(this, &Input::videoGrabberInit);
     std::vector<ofVideoDevice> listOfDevice = videoGrabber.listDevices();
@@ -65,7 +50,6 @@ void Input::setup(){
     
     pg->add(videoGrabberIndex.set("webcam_index", indexBlackMagicDevice, 0, 10));
     name = "WEB CAM";
-#endif
     
     // ADITIONAL PARAMETERS
     isUpdatingRight = false;
@@ -124,22 +108,12 @@ void Input::update(){
     
     //Update blackmagic
     
-#if INPUT_VIDEO == 0
-    player.update();
-    isUpdatingRight = player.isFrameNew();
-    lastTimeAppFrame = ofGetSystemTimeMicros();
-    if(isUpdatingRight) lastTimeNewFrame = ofGetSystemTimeMicros();
-#elif INPUT_VIDEO == 1
-    isUpdatingRight = blackMagic.update();
-    lastTimeAppFrame = ofGetSystemTimeMicros();
-    if(isUpdatingRight) lastTimeNewFrame = ofGetSystemTimeMicros();
-#elif INPUT_VIDEO == 2
+
     videoGrabber.update();
     isUpdatingRight = videoGrabber.isFrameNew();
     lastTimeAppFrame = ofGetSystemTimeMicros();
     if(isUpdatingRight) lastTimeNewFrame = ofGetSystemTimeMicros();
     
-#endif
     
     
     /* Draw only if there is a new frame available
@@ -156,13 +130,9 @@ void Input::update(){
         shaderTreshHsv.setUniform1f("threshold_smooth", smooth);
         shaderTreshHsv.setUniform1f("transparency_smooth", transparency);
         ofSetColor(255, 255, 255, 255);
-#if     INPUT_VIDEO == 0
-        player.draw(0, 0, w, h);
-#elif   INPUT_VIDEO == 1
-        blackMagic.drawColor();
-#elif   INPUT_VIDEO == 2
+
         videoGrabber.draw(0, 0, fboTresh.getWidth(), fboTresh.getHeight());
-#endif
+
         shaderTreshHsv.end();
         fboTresh.end();
         
@@ -231,39 +201,7 @@ void Input::update(){
     
 }
 
-#if INPUT_VIDEO == 0
-//--------------------------------------------------------------
-void Input::setVideoIndex(int &newIndex){
-    
-    ofFile myFile;
-    myFile.open("movie/"+ofToString(newIndex)+".mp4");
-    if(myFile.exists()){
-        ofLog(OF_LOG_NOTICE, "checking video : TRUE");
-    }
-    else{
-        ofLog(OF_LOG_NOTICE, "checking video : FALSE");
-        myFile.open("clouds.mov");
-    }
-    
-    player.load(myFile.path());
-    player.setLoopState(OF_LOOP_NORMAL);
-    player.setVolume(0);
-    player.play();
-    
-    
-}
-#endif
 
-#if INPUT_VIDEO == 0
-//--------------------------------------------------------------
-void Input::setVideoPause(bool &isPause){
-    
-    player.setPaused(isPause);
-    
-}
-#endif
-
-#if INPUT_VIDEO == 2
 //--------------------------------------------------------------
 void Input::videoGrabberInit(int &index){
     
@@ -273,4 +211,4 @@ videoGrabber.setDesiredFrameRate(INPUT_FRAMERATE);
 videoGrabber.initGrabber(INPUT_WIDTH, INPUT_HEIGHT);
 
 }
-#endif
+

@@ -6,8 +6,6 @@
 #include "input.hpp"
 #include "imageBuffer.hpp"
 #include "mask.hpp"
-//#include "ofxSyphon.h"
-//#include "ofxPostProcessing.h"
 
 #define FONT_BIG 3
 #define FONT_MEDIUM 2
@@ -67,8 +65,6 @@ class ofApp : public ofBaseApp{
     ofParameter<float> global_zoom;
     ofParameter<bool> auto_export;
     
-    //Syphon output
-    //ofxSyphonServer syphonOut;
     ofTexture textureToPublish;
     ofImage imgTest;
     

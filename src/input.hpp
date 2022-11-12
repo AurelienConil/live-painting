@@ -14,8 +14,6 @@
 #include "ofxGui.h"
 #include "ofxOscParameterSync.h"
 
-//Define input video : 0 = files  | 1 = blackmagic | 2 = videograbber
-#define INPUT_VIDEO 2
 
 // Define INPUT Width and Height
 #define INPUT_WIDTH 1920
@@ -44,20 +42,11 @@ public:
     bool isUpdatingRight;
     uint64_t lastTimeNewFrame;
     uint64_t lastTimeAppFrame;
-#if INPUT_VIDEO == 0
-    ofVideoPlayer player;
-    void setVideoIndex(int &newIndex);
-    void setVideoPause(bool &isPause);
-    ofParameter<bool> playerPause;
-    ofParameter<int> videoIndex;
-#elif INPUT_VIDEO == 1
-    ofxBlackMagic blackMagic;
-#elif INPUT_VIDEO == 2
+
     //Camera Grabber ( webcam )
     ofVideoGrabber videoGrabber;
     ofParameter<int> videoGrabberIndex;
     void videoGrabberInit(int &newIndex);
-#endif
     
     int w;
     int h;

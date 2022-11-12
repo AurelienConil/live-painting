@@ -7,19 +7,11 @@
  
                  Input ( file or hdmi input )
                     |
-                   / \
-                  /   \
-        videoBuffer     ImageBuffer
-                  \   /
+			 ImageBuffer
+                    |
                    Mask
                     |
-                 ouput_fx
-                    |
-                image_layer ( can be post of pre-fx )
-                    |
                  output_final
- 
- 
  
  */
 
@@ -45,28 +37,8 @@
  
  */
 
-/*
- RENCONTRE AVEC SYLVIE :
- 
- faire un shader d'impression.
- on efface, l'image courante, mais ce qui a passé un certain seuil, ne bouge pas. en gros, ce qui est cramé reste cramé, le reste d'efface.
- 
- Afficher la valeur max de l'image d'entrée.
- Car ça conditionne, la vitesse à laquelle on crame.
- 
- 
- */
 
-/*
- RENCONTRE AVEC JADIKAN janvier 2021
- Enlever la transparence avant le buffet image, et juste comparer la différence de luminosité
- Entre le fond et la nouvelle image. Si cette différence est faible, alors on ajoute un effet de transparence. ( proportionnelle ).
- 
- Rajouter un mirroir
- Rajouter un fullscreen
- 
- 
-*/
+
 
 /*
  ========================================
@@ -169,9 +141,6 @@ void ofApp::setup(){
     marginW = 10;
     
     
-    
-    //SYPHON SETTINGS
-    //syphonOut.setName("Jadikan LightPainting");
     
     //Zoom image setup
     zoomImage.allocate(vignetteZoom.width/2, vignetteZoom.height/2, OF_IMAGE_COLOR_ALPHA);
@@ -303,7 +272,6 @@ void ofApp::draw(){
    
     ofSetColor(255, 255, 255);
     ofFill();
-    //syphonOut.publishTexture(&(mask->fbo.getTexture()));
     
     
     ofSetColor(255,255,255);
