@@ -62,6 +62,8 @@ public:
     ofParameter<float> transparency;
     ofParameter<float> blur;
     ofParameter<bool> isShown;
+	ofParameter<bool> symetrieV;
+	ofParameter<bool> symetrieH;
     ofShader shaderTreshHsv;
     //ofShader shaderBlurX;
     //ofShader shaderBlurY;

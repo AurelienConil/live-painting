@@ -33,6 +33,7 @@ void Input::setup(){
     pg->add(smooth.set("threshold_curve", 0, 0, 1));
     //pg->add(transparency.set("transparency", 0, 0, 1));
     transparency.set("transparency", 0, 0, 1);
+	pg->add(symetrieV.set("Mirror", false));
     //pg->add(blur.set("blur", 0, 0, 10));
     //pg->add(skipStep.set("skip_step", 2, 0, 3));
     
@@ -174,7 +175,14 @@ void Input::update(){
     fbo.begin();
     ofClear(255,255,255, 0);
     ofEnableAlphaBlending();
-    fboTresh.draw(0,0);
+
+	if (symetrieV) {
+		fboTresh.draw(fboTresh.getWidth(), 0, -fboTresh.getWidth(), fboTresh.getHeight());
+	}
+	else {
+		fboTresh.draw(0, 0);
+	}
+    
     /*
     switch (skipStep) {
         case 0:
